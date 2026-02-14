@@ -33,7 +33,7 @@ def index(request: Request, db=Depends(get_db)):
                                       context= {"request": request, "tasks": all_tasks})
 
 @app.get("/task/{task_id}")
-def index(request: Request, task_id: int, db=Depends(get_db)):
+def get_task(request: Request, task_id: int, db=Depends(get_db)):
     task = db.query(Task).filter(Task.id == task_id).first()
     return templates.TemplateResponse(name="task.html",
                                       context= {"request": request, "task": task})
@@ -49,13 +49,3 @@ def update_task(task_id: int, task: TaskCheck, db=Depends(get_db)):
         db.refresh(selected_task)
         return selected_task
     return {"error": "Task not found"}
-
-@app.delete("/tasks/{task_id}")
-def delete_task(task_id: int, db: Session = Depends(get_db)):
-    db_task = db.query(Task).filter(Task.id == task_id).first()
-    if not db_task:
-        raise HTTPException(status_code=404, detail="Task not found")
-    
-    db.delete(db_task)
-    db.commit()
-    return {"message": f"Task {task_id} deleted successfully"}
