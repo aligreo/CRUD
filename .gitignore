@@ -3,3 +3,4 @@ db
 __pychace__
 *.db
 venv
+.gitignore
