@@ -32,12 +32,6 @@ def index(request: Request, db=Depends(get_db)):
     return templates.TemplateResponse(name="index.html",
                                       context= {"request": request, "tasks": all_tasks})
 
-@app.get("/task/{task_id}")
-def get_task(request: Request, task_id: int, db=Depends(get_db)):
-    task = db.query(Task).filter(Task.id == task_id).first()
-    return templates.TemplateResponse(name="task.html",
-                                      context= {"request": request, "task": task})
-
 # update a task
 @app.put("/update_task/{task_id}", response_model=TaskCheck)
 def update_task(task_id: int, task: TaskCheck, db=Depends(get_db)):
